@@ -20,6 +20,7 @@ classifiers = [
 
 dependencies = [
   "pypdf >= 4.2.0",
+  "antx >= 0.1.11",
 ]
 [project.optional-dependencies]
 dev = [
