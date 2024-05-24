@@ -31,7 +31,7 @@ def replace_double_quotes(text:str)->str:
 
 def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->str:
     """ removes chapter name from the text """
-    text_stripped = text.strip().replace("\n", "").replace(" ","")
+    text_stripped = text.strip().replace("\n", " ").replace(" ","")
 
     chapter_no = 1
     for chapter, _ in chapter_page_numbers:
