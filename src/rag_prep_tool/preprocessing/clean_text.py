@@ -1,3 +1,4 @@
+import re 
 from typing import List 
 
 from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
@@ -7,11 +8,14 @@ from antx.core import transfer
 def normalize_text(text:str)->str:
     """ replaces double quotes with < and >"""
     text = replace_double_quotes(text)
-    text = text.replace("\n","").replace(r"[ ]+"," ")
+    text = text.replace("\n","")
+    """ Replace multiple spaces with a single space """
+    text = re.sub(r"[ ]+", " ", text)
     return text.strip()
 
 
 def replace_double_quotes(text:str)->str:
+    """ replaces double quotes with < and >"""
     result = []
     quote_count = 0
     for char in text:
