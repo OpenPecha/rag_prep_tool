@@ -19,7 +19,7 @@ classifiers = [
 
 
 dependencies = [
-  "pypdf >= 4.2.0",
+  "PyMuPDF >= 1.24.4",
   "antx >= 0.1.11",
 ]
 [project.optional-dependencies]
