@@ -36,14 +36,13 @@ def build_metadata_for_book(page_annotated_file:Path, chapter_page_numbers: List
         text = normalize_text(text)
         meta_data.append({"book_title":"The Art of Happiness at Work", 
                             "page_no":i+start_page_number, 
-                            "chapter": get_chapter_from_page_number(i+start_page_number+page_diff),
+                            "chapter": get_chapter_from_page_number(i+start_page_number+page_diff, chapter_page_numbers),
                             "start_char":char_count,
                             "end_char":len(text)+char_count,
                             "content":text})
         char_count += len(text)
 
     """ Save the meta_data to a json file """
-    output_file_path = Path("art_of_happiness.json")
     with open(output_file_path, "w") as f:
         f.write(json.dumps(meta_data, indent=4))
 
