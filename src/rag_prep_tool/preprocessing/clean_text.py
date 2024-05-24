@@ -4,9 +4,8 @@ from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
 from antx.core import transfer
 
 
-def normalize_text(text:str, chapter_page_numbers:List[List])->str:
+def normalize_text(text:str)->str:
     """ replaces double quotes with < and >"""
-    text = remove_chapter_name_from_text(text, chapter_page_numbers)
     text = replace_double_quotes(text)
     text = text.replace("\n","").replace(r"[ ]+"," ")
     return text.strip()

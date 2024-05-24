@@ -2,8 +2,7 @@ import json
 from pathlib import Path
 from typing import List, Dict 
 
-from rag_prep_tool.preprocessing.clean_text import normalize_text, get_chapter_from_page_number
-from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
+from rag_prep_tool.preprocessing.clean_text import normalize_text, remove_chapter_name_from_text, get_chapter_from_page_number
 
 def build_metadata_for_book(page_annotated_file:Path, chapter_page_numbers: List[List], pagination_details:Dict[str,int], output_file_path:Path ):
 
@@ -32,7 +31,9 @@ def build_metadata_for_book(page_annotated_file:Path, chapter_page_numbers: List
         """ removes eplilogue and appendix"""
         if i+start_page_number > end_page_number:
             break
-        text = normalize_text(text, chapter_page_numbers)
+        
+        text = remove_chapter_name_from_text(text, chapter_page_numbers)
+        text = normalize_text(text)
         meta_data.append({"book_title":"The Art of Happiness at Work", 
                             "page_no":i+start_page_number, 
                             "chapter": get_chapter_from_page_number(i+start_page_number+page_diff),
