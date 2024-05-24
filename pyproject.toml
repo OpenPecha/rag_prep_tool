@@ -17,6 +17,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+
+dependencies = [
+  "pypdf >= 4.2.0",
+]
 [project.optional-dependencies]
 dev = [
     "pytest",
