@@ -4,7 +4,7 @@ from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
 from antx.core import transfer
 
 
-def normalize_text(text:str, chapter_page_numbers:List[List[str,int]])->str:
+def normalize_text(text:str, chapter_page_numbers:List[List])->str:
     """ replaces double quotes with < and >"""
     text = remove_chapter_name_from_text(text, chapter_page_numbers)
     text = replace_double_quotes(text)
@@ -15,7 +15,6 @@ def normalize_text(text:str, chapter_page_numbers:List[List[str,int]])->str:
 def replace_double_quotes(text:str)->str:
     result = []
     quote_count = 0
-    
     for char in text:
         if char == '"':
             quote_count += 1
@@ -27,7 +26,7 @@ def replace_double_quotes(text:str)->str:
             result.append(char)
     return ''.join(result)
 
-def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List[str,int]])->str:
+def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->str:
     """ removes chapter name from the text """
     text_stripped = text.strip().replace("\n", "").replace(" ","")
 
@@ -43,7 +42,7 @@ def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List[str,i
     return text
 
 
-def get_chapter_from_page_number(page_no:int, chapter_page_numbers:List[List[str,int]])->str:
+def get_chapter_from_page_number(page_no:int, chapter_page_numbers:List[List])->str:
     prev_chapter = ""
     for chapter, chapter_page_start in chapter_page_numbers:
         if page_no >= chapter_page_start:
