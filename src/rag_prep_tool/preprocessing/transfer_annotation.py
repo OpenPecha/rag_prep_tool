@@ -8,7 +8,7 @@ def transfer_page_ann(source_text:str, target_text:str)->str:
 
     annotations = [["page_breaks", "(⏎)"]]
     page_annoted_text = transfer(source_text, annotations, target_text, output="txt")
-
+    page_annoted_text = page_annoted_text.replace("⏎", "\n\n")
     return page_annoted_text
 
 
