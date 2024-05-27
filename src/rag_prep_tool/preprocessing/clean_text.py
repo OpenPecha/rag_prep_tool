@@ -29,18 +29,43 @@ def replace_double_quotes(text:str)->str:
             result.append(char)
     return ''.join(result)
 
+def number_to_words(num):
+    if not (1 <= num <= 30):
+        return "Number out of range"
+    
+    words = [
+        "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+        "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
+        "Twenty"
+    ]
+    return words[num - 1]
+
+def remove_substring_from_text(text:str, substring:str)->str:
+    """ removes the substring from the text """
+    """ exclude the new lines and spaces"""
+    """ substring should start from the beginning of the text"""
+    sub_string_len = len(substring)
+    count = 0
+    for idx,char in enumerate(text):
+        if char in ["\n", " "]:
+            continue
+        count += 1
+        if count == sub_string_len:
+            return text[idx+1:]
+    return text
+
+
 def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->str:
     """ removes chapter name from the text """
     text_stripped = text.strip().replace("\n", " ").replace(" ","")
 
     chapter_no = 1
     for chapter, _ in chapter_page_numbers:
-        chapter_start = f"Chapter{chapter_no}{chapter.replace(' ', '')}"
-        if text_stripped.startswith(chapter_start):
-            text_stripped = text_stripped.replace(chapter_start, "")
-            annotations = [["new_line", "(\n)"], ["space", "(\s)"]]
-            output_text = transfer(text, annotations, text_stripped, output="txt")
-            return output_text.strip()
+        """ Chapter could start with 'Chapter1' or 'ChapterOne'"""
+        chapter_start_variations = [f"Chapter{chapter_no}{chapter.replace(' ', '')}", f"Chapter{number_to_words(chapter_no)}{chapter.replace(' ', '')}"]
+        for chapter_start in chapter_start_variations:
+            if text_stripped.startswith(chapter_start):
+                return remove_substring_from_text(text, chapter_start).strip()
         chapter_no += 1
     return text
 
