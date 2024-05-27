@@ -31,5 +31,6 @@ def preprocess(pdf_file_path:Path, clean_text_path:Path, book_name:str, chapter_
 
     """ build metadata for the book and save it in json format"""
     output_metadata_path = Path(f"{file_name}_metadata.json")
-    build_metadata_for_book(page_annotated_file, book_name,chapter_page_numbers, pagination_details, output_metadata_path)
+    book_meta_data = build_metadata_for_book(page_annotated_file, book_name,chapter_page_numbers, pagination_details, output_metadata_path)
+    return book_meta_data
 
