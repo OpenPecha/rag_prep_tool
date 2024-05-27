@@ -4,7 +4,7 @@ from typing import List, Dict
 
 from rag_prep_tool.preprocessing.clean_text import normalize_text, remove_chapter_name_from_text, get_chapter_from_page_number
 
-def build_metadata_for_book(page_annotated_file:Path, chapter_page_numbers: List[List], pagination_details:Dict[str,int], output_file_path:Path ):
+def build_metadata_for_book(page_annotated_file:Path, book_name:str, chapter_page_numbers: List[List], pagination_details:Dict[str,int], output_file_path:Path ):
 
     start_page_number = pagination_details["start_page_number"]
     page_diff = pagination_details["page_diff"]
@@ -34,7 +34,7 @@ def build_metadata_for_book(page_annotated_file:Path, chapter_page_numbers: List
         
         text = remove_chapter_name_from_text(text, chapter_page_numbers)
         text = normalize_text(text)
-        meta_data.append({"book_title":"The Art of Happiness at Work", 
+        meta_data.append({"book_title":book_name, 
                             "page_no":i+start_page_number, 
                             "chapter": get_chapter_from_page_number(i+start_page_number+page_diff, chapter_page_numbers),
                             "start_char":char_count,
@@ -47,3 +47,13 @@ def build_metadata_for_book(page_annotated_file:Path, chapter_page_numbers: List
         f.write(json.dumps(meta_data, indent=4))
 
    
+if __name__ == "__main__":
+    from rag_prep_tool.vars import ETHICS_FOR_THE_MILENNIUM_PAGE_NUMBERS 
+
+
+    page_annoted_file_path = Path("output/Ethics for the New Millennium_annotated.txt")
+    book_name = "Ethics for the New Millennium"
+    pagination_details = {"start_page_number":9, "page_diff":0, "end_page_number":92}
+
+    output_file_path = Path("output/Ethics for the New Millennium_metadata.json")
+    build_metadata_for_book(page_annoted_file_path, book_name, ETHICS_FOR_THE_MILENNIUM_PAGE_NUMBERS, pagination_details,output_file_path)
