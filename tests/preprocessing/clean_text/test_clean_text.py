@@ -25,7 +25,15 @@ def test_remove_chapter_name_from_text():
     output  = remove_chapter_name_from_text(text, ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS)
     assert output == "Hello"
 
+    text = "Chapter One TRANSFORMING DISSATISFACTION AT WORK Hello"
+    output  = remove_chapter_name_from_text(text, ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS)
+    assert output == "Hello"
+
     text = "Chapter5 \nJOB, CAREER,  AND\n CALLING It has been a very long day since"
+    output  = remove_chapter_name_from_text(text, ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS)
+    assert output == "It has been a very long day since"
+
+    text = "ChapterFive \nJOB, CAREER,  AND\n CALLING It has been a very long day since"
     output  = remove_chapter_name_from_text(text, ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS)
     assert output == "It has been a very long day since"
 
