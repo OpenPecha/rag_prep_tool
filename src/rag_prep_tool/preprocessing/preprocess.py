@@ -14,10 +14,15 @@ def preprocess(pdf_file_path:Path, clean_text_path:Path, book_name:str, chapter_
     with open(f"{file_name}.json", "w", encoding="utf-8") as f:
         json.dump(extracted_data, f, indent=4)
 
+
     extracted_text_path = Path(f"{file_name}.txt")
+    start_page_number = pagination_details["start_page_number"]
+    page_diff = pagination_details["page_diff"]
+    end_page_number = pagination_details["end_page_number"]
+
     with open(extracted_text_path, "w", encoding="utf-8") as f:
         for page_no, page_text in extracted_data.items():
-            if page_no <=7 or page_no >= 91:
+            if page_no <=start_page_number+page_diff or page_no >= end_page_number+page_diff:
                 continue
             f.write(f"{page_text}\n\n")
     
