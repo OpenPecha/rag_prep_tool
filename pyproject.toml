@@ -20,7 +20,11 @@ classifiers = [
 
 dependencies = [
   "PyMuPDF >= 1.24.4",
-  "antx >= 0.1.11",
+  "fast_antx @ git+https://github.com/OpenPecha/fast-antx.git",
+  "llama-index-readers-file >= 0.1.23",
+  "llama-index-core >= 0.10.40",
+
+
 ]
 [project.optional-dependencies]
 dev = [
