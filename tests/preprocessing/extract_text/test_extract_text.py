@@ -10,7 +10,7 @@ def test_extract_text_from_pdf_file():
 
     extracted_data = extract_text_from_pdf_file(pdf_file_path)    
 
-    with open(DATA_DIR / "expected_extracted_file.json", "r") as f:
+    with open(DATA_DIR / "expected_extracted_file.json", "r", encoding="utf-8") as f:
         expected_extracted_data = json.load(f)
 
     """ Convert expected_extracted_data keys to integer for comparison """

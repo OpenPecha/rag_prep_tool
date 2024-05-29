@@ -43,7 +43,7 @@ def build_metadata_for_book(page_annotated_file:Path, book_name:str, chapter_pag
         char_count += len(text)
 
     """ Save the meta_data to a json file """
-    with open(output_file_path, "w") as f:
+    with open(output_file_path, "w", encoding="utf-8") as f:
         f.write(json.dumps(meta_data, indent=4))
 
     return meta_data
@@ -58,6 +58,11 @@ if __name__ == "__main__":
     pagination_details = {"start_page_number":9, "page_diff":0, "end_page_number":91}
 
     output_file_path = Path("output/Ethics for the New Millennium_metadata.json")
-    build_metadata_for_book(page_annoted_file_path, book_name, ETHICS_FOR_THE_MILENNIUM_PAGE_NUMBERS, pagination_details,output_file_path)
+    meta_data = build_metadata_for_book(page_annoted_file_path, book_name, ETHICS_FOR_THE_MILENNIUM_PAGE_NUMBERS, pagination_details,output_file_path)
+    content = ""
+    for data in meta_data:
+        content += data["content"]
+    Path("Ethics for the New Millennium_content.txt").write_text(content, encoding="utf-8")
+        
 
 

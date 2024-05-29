@@ -11,11 +11,11 @@ def preprocess(pdf_file_path:Path, clean_text_path:Path, book_name:str, chapter_
     extracted_data = extract_text_from_pdf_file(pdf_file_path)
 
     file_name = pdf_file_path.stem
-    with open(f"{file_name}.json", "w") as f:
+    with open(f"{file_name}.json", "w", encoding="utf-8") as f:
         json.dump(extracted_data, f, indent=4)
 
     extracted_text_path = Path(f"{file_name}.txt")
-    with open(extracted_text_path, "w") as f:
+    with open(extracted_text_path, "w", encoding="utf-8") as f:
         for page_no, page_text in extracted_data.items():
             if page_no <=7 or page_no >= 91:
                 continue
