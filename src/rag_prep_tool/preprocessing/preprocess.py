@@ -1,7 +1,7 @@
 import json 
 
 from pathlib import Path 
-
+from typing import List, Dict 
 from rag_prep_tool.preprocessing.extract_text import extract_text_from_pdf_file
 from rag_prep_tool.preprocessing.transfer_annotation import transfer_page_ann
 from rag_prep_tool.preprocessing.build_metadata import build_metadata_for_book
