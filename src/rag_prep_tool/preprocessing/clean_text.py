@@ -30,7 +30,7 @@ def replace_double_quotes(text:str)->str:
     return ''.join(result)
 
 def number_to_words(num):
-    if not (1 <= num <= 30):
+    if not (1 <= num <= 20):
         return "Number out of range"
     
     words = [
