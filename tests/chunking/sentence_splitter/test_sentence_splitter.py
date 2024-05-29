@@ -8,7 +8,7 @@ from rag_prep_tool.chunking import chunk_files
 
 def test_sentence_splitter():
     DATA_DIR = Path(__file__).parent / "data"
-    text_file_path = DATA_DIR / "art_of_happiness_chapter_1_first_page.txt"
+    text_file_path = DATA_DIR / "ethics_for_new_millennium_chapter_1_first_page.txt"
     
     chunk_size = 500
     chunk_overlap = 50
