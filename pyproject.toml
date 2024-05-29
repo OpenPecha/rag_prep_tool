@@ -23,8 +23,7 @@ dependencies = [
   "fast_antx @ git+https://github.com/OpenPecha/fast-antx.git",
   "llama-index-readers-file >= 0.1.23",
   "llama-index-core >= 0.10.40",
-
-
+  "nltk >= 3.8.1",
 ]
 [project.optional-dependencies]
 dev = [
