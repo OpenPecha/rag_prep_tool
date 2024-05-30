@@ -37,6 +37,5 @@ def test_store_chunks():
 
     """ Clean up the database and persist directories """
     shutil.rmtree(database_path)
-test_store_chunks()
 
 

@@ -13,6 +13,5 @@ def test_load_chunks():
     chunks_vectors = load_chunks_from_database(str(database_path), collection_name, str(persist_path))
     assert isinstance(chunks_vectors, VectorStoreIndex)
 
-test_load_chunks()
 
 
