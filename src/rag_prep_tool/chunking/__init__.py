@@ -14,8 +14,3 @@ def chunk_files(file_paths: List[Path], chunk_size: int = 500, chunk_overlap: in
     chunks = base_splitter.get_nodes_from_documents(documents)
 
     return chunks 
-
-if __name__ == "__main__":
-    file_paths = [Path("output/Ethics for the New Millennium_content.txt")]
-    chunks = chunk_files(file_paths)
-    print(chunks[0].text)
