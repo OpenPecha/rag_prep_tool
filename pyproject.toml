@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "project_name"
+name = "rag_prep_tool"
 version = "0.0.1"
 authors = [
   { name="OpenPecha", email="dev@openpecha.org" },
 ]
-description = "A small example package"
+description = "tool to prepare for rag."
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
@@ -17,6 +17,11 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+
+dependencies = [
+  "PyMuPDF >= 1.24.4",
+  "antx >= 0.1.11",
+]
 [project.optional-dependencies]
 dev = [
     "pytest",
