@@ -58,6 +58,9 @@ def store_chunks(chunks, db_path="./chroma_db", collection_name="rag_demo", pers
     return chunk_ids
 
 def load_chunks_from_database(db_path="./chroma_db", collection_name="rag_demo",persist_dir="./chroma_db/index"):
+    embed_model = HuggingFaceEmbedding(model_name=EMBEDDING_MODEL,trust_remote_code=True)
+    Settings.embed_model = embed_model
+    
     """ Initialize the Chroma persistent client """
     chroma_client = chromadb.PersistentClient(path=db_path)
     
@@ -74,3 +77,4 @@ def load_chunks_from_database(db_path="./chroma_db", collection_name="rag_demo",
     vector_store_llama_index = load_index_from_storage(storage_context)
     
     return vector_store_llama_index
+
