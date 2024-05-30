@@ -34,7 +34,7 @@ def get_metadata_for_each_chunk(chunks: List[TextNode], metadata: Path)->Dict:
 def map_chunks_with_metadata(chunks: List[TextNode], metadata_file_path: Path)->List[TextNode]:
     """Map the metadata to the chunks"""
 
-    with open(metadata_file_path) as f:
+    with open(metadata_file_path, encoding="utf-8") as f:
         metadata = json.load(f)
     
     mapping = get_metadata_for_each_chunk(chunks, metadata)
