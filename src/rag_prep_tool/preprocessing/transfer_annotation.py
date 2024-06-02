@@ -1,4 +1,4 @@
-from antx.core import transfer
+from fast_antx.core import transfer
 
 
 def transfer_page_ann(source_text:str, target_text:str)->str:
