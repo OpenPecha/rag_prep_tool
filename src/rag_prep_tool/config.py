@@ -1,0 +1,1 @@
+EMBEDDING_MODEL = "Alibaba-NLP/gte-large-en-v1.5"
