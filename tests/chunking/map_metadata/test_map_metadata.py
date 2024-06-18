@@ -12,8 +12,9 @@ def test_sentence_splitter():
     metadata_file_path = DATA_DIR / "art_of_happiness.json"
     chunk_size = 500
     chunk_overlap = 50
-    chunks = chunk_files([text_file_path], chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-
+    all_chunks = chunk_files([text_file_path], chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+    chunks = all_chunks[0]
+    
     """ before mapping metadata"""
     for chunk in chunks:
         assert isinstance(chunk, TextNode)
