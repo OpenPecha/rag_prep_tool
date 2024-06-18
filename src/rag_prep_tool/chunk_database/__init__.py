@@ -15,7 +15,7 @@ def add_embeddings_to_chunks(chunks):
     embed_model = HuggingFaceEmbedding(model_name=EMBEDDING_MODEL,trust_remote_code=True)
     Settings.embed_model = embed_model
 
-    for chunk in tqdm(chunks):
+    for chunk in tqdm(chunks, desc="Adding embeddings to chunks"):
       chunk.embedding = embed_model.get_text_embedding(chunk.text)
     return chunks
 
@@ -49,9 +49,6 @@ def store_chunks(chunks, db_path="./chroma_db", collection_name="rag_demo", pers
     """ Create a VectorStoreIndex from the vector store """
     vector_store_llama_index = VectorStoreIndex.from_vector_store(vector_store)
     
-    """ Set the index as a retriever """
-    vector_store_llama_index.as_retriever()
-    
     """ Persist the storage context to the specified directory """
     vector_store_llama_index.storage_context.persist(persist_dir=persist_dir)
 
@@ -77,4 +74,6 @@ def load_chunks_from_database(db_path="./chroma_db", collection_name="rag_demo",
     vector_store_llama_index = load_index_from_storage(storage_context)
     
     return vector_store_llama_index
+
+
 
