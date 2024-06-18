@@ -31,7 +31,7 @@ def get_metadata_for_each_chunk(chunks: List[TextNode], metadata: List[Dict]) ->
 
     return mapping
 
-def map_chunks_with_metadata(chunks_list: List[List[TextNode]], metadata_files: List[Path]) -> List[List[TextNode]]:
+def map_chunks_with_metadata(chunks_list: List[List[TextNode]], metadata_files: List[Path]) -> List[TextNode]:
     """Map the metadata to the chunks separately for each book"""
     all_mapped_chunks = []
 
@@ -49,7 +49,7 @@ def map_chunks_with_metadata(chunks_list: List[List[TextNode]], metadata_files: 
                     metadata_str = ','.join(map(str, metadata_str))
                 chunk.metadata[key_] = metadata_str
 
-        all_mapped_chunks.append(chunks)
+        all_mapped_chunks.extend(chunks)
 
     return all_mapped_chunks
 

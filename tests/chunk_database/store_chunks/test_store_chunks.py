@@ -15,12 +15,8 @@ def test_store_chunks():
 
     file_paths = [text_file_path]
     all_chunks = chunk_files(file_paths)
-    all_mapped_chunks = map_chunks_with_metadata(all_chunks, [metadata_file_path])
+    mapped_chunks = map_chunks_with_metadata(all_chunks, [metadata_file_path])
 
-    mapped_chunks = []
-    for chunk in all_mapped_chunks:
-        mapped_chunks.extend(chunk)
-        
     database_path = DATA_DIR / "chroma_db"
     persist_path = database_path / "index"
 
