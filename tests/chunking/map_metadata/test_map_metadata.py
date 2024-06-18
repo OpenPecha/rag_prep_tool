@@ -24,7 +24,8 @@ def test_sentence_splitter():
         assert "chapter" not in chunk_metadata
 
     """ after mapping metadata"""
-    mapped_chunks = map_chunks_with_metadata(chunks, metadata_file_path)
+    all_mapped_chunks = map_chunks_with_metadata(all_chunks, [metadata_file_path])
+    mapped_chunks = all_mapped_chunks[0]
     for chunk in mapped_chunks:
         assert isinstance(chunk, TextNode)
         chunk_metadata = chunk.metadata
