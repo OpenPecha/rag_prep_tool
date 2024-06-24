@@ -1,4 +1,4 @@
-
+import re 
 import fitz  
 from pathlib import Path
 from typing import Dict 
@@ -26,6 +26,9 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
     for page_no, content in extracted_text.items():
         stripped_content = content.strip().replace("\n","").replace(" ","")
         
+        """ """
+
+        """ Possible starts such as Chapter 1, Chapter One"""
         possible_starts = ["Chapter", "CHAPTER", "chapter"]
         if any(stripped_content.startswith(chapter_start) for chapter_start in possible_starts):
             flag = False 
@@ -37,7 +40,11 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     flag = True 
             
                 if flag:
-                    chapter_page_details.append([f"Chapter {number}", page_no])
+                    """ Get chapter name from content"""
+                    """ ' \nChapter One\nCHAPTER NAME\nPAGE CONTENT ... '"""
+                    cleaned_content = re.sub(r'\s*\n\s*', '\n', content.strip())
+                    chapter_name = cleaned_content.splitlines()[1]
+                    chapter_page_details.append([f"{chapter_name}", page_no])
                     break 
     
     return chapter_page_details
