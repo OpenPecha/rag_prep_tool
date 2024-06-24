@@ -3,6 +3,7 @@ import fitz
 from pathlib import Path
 from typing import Dict 
 
+from rag_prep_tool.preprocessing.clean_text import number_to_words
 
 def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
     """Reads the content of a PDF file using PyMuPDF."""
@@ -18,5 +19,36 @@ def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
         print(f"Failed to read PDF file {pdf_file_path}: {e}")
         return {}
 
-    
 
+def get_chapter_page_ranges(extracted_text:Dict[int, str]):
+    chapter_page_details = []
+
+    for page_no, content in extracted_text.items():
+        stripped_content = content.strip().replace("\n","").replace(" ","")
+        
+        possible_starts = ["Chapter", "CHAPTER", "chapter"]
+        if any(stripped_content.startswith(chapter_start) for chapter_start in possible_starts):
+            flag = False 
+            for number in range(20,0,-1):
+                if stripped_content[len("chapter"):].startswith(str(number)):
+                    flag = True 
+                number_in_word = number_to_words(number)
+                if stripped_content[len("chapter"):].startswith(number_in_word):
+                    flag = True 
+            
+                if flag:
+                    chapter_page_details.append([f"Chapter {number}", page_no])
+                    break 
+    
+    return chapter_page_details
+
+
+
+
+if __name__ == "__main__":
+    pdf_path = Path("output/EN19 Ethics for the New Millennium - Dalai Lama.pdf")
+    extracted_text = extract_text_from_pdf_file(pdf_path)
+    chapter_details = get_chapter_page_ranges(extracted_text)
+    print(chapter_details)
+
+    
