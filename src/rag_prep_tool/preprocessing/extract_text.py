@@ -40,10 +40,20 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     flag = True 
             
                 if flag:
-                    """ Get chapter name from content"""
+                    """ Get chapter name from page content"""
                     """ ' \nChapter One\nCHAPTER NAME\nPAGE CONTENT ... '"""
                     cleaned_content = re.sub(r'\s*\n\s*', '\n', content.strip())
                     chapter_name = cleaned_content.splitlines()[1]
+
+                    """ Get page number of page number"""
+                    """ Important Note: page number written on bottom of page, not the actual page number"""
+                    
+                    try: 
+                        page_no = cleaned_content.split("\n")[-1]
+                        page_no = page_no.replace(" ","")
+                        page_no = int(page_no)
+                    except:
+                        pass 
                     chapter_page_details.append([f"{chapter_name}", page_no])
                     break 
     
@@ -53,7 +63,7 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
 
 
 if __name__ == "__main__":
-    pdf_path = Path("output/EN19 Ethics for the New Millennium - Dalai Lama.pdf")
+    pdf_path = Path("output/art_of_happiness_at_work.pdf")
     extracted_text = extract_text_from_pdf_file(pdf_path)
     chapter_details = get_chapter_page_ranges(extracted_text)
     print(chapter_details)
