@@ -60,7 +60,7 @@ def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->st
     text_stripped = text.strip().replace("\n", " ").replace(" ","")
 
     chapter_no = 1
-    for chapter, _ in chapter_page_numbers:
+    for chapter, _,_ in chapter_page_numbers:
         """ Chapter could start with 'Chapter1' or 'ChapterOne'"""
         chapter_start_variations = [f"Chapter{chapter_no}{chapter.replace(' ', '')}", f"Chapter{number_to_words(chapter_no)}{chapter.replace(' ', '')}"]
         for chapter_start in chapter_start_variations:
@@ -72,7 +72,7 @@ def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->st
 
 def get_chapter_from_page_number(page_no:int, chapter_page_numbers:List[List])->str:
     prev_chapter = ""
-    for chapter, chapter_page_start in chapter_page_numbers:
+    for chapter, chapter_page_start,_ in chapter_page_numbers:
         if page_no >= chapter_page_start:
             prev_chapter = chapter
             continue

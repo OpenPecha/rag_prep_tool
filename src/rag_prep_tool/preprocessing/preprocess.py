@@ -20,6 +20,12 @@ def preprocess(pdf_file_path:Path, transcribed_text_path:Path, book_name:str):
     filtered_text = "\n\n".join([content for page_no, content in extracted_data.items() if first_page <= page_no <= last_page])
     page_annoted_text = transfer_page_ann(filtered_text, transcribed_text)
 
+    meta_data = build_metadata_for_book(page_annoted_text, book_name,chapter_details)
+    
+    """ Save the meta_data to a json file """
+    with open(f"{pdf_file_path.stem}.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(meta_data, indent=4))
+
 
 if __name__ == "__main__":
     pdf_path = Path("output/art_of_happiness_at_work.pdf")
