@@ -25,7 +25,7 @@ def filter_extracted_text(extracted_text:str, transcribed_text:str)->str:
     annotations = [["page_breaks", "(⏎)"]]
 
     annotated_text = transfer(transcribed_text, annotations, extracted_text, output="txt")
-    filtered_text = "".join(annotated_text.split("⏎")[1:3])
+    filtered_text = "".join(annotated_text.split("⏎")[1])
     return filtered_text
     
 
@@ -65,9 +65,8 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     flag = True 
             
                 if flag:
-                    chapter_name, page_number = get_chapter_name_and_page_number(content)
-                    page_no = page_number if page_number else page_no
-                    chapter_page_details.append([f"{chapter_name}", page_no])
+                    chapter_name, bottom_page_no = get_chapter_name_and_page_number(content)
+                    chapter_page_details.append([f"{chapter_name}", bottom_page_no, page_no])
                     break 
     return chapter_page_details
 
