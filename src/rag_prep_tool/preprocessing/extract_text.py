@@ -1,7 +1,7 @@
 import re 
 import fitz  
 from pathlib import Path
-from typing import Dict 
+from typing import Dict , Tuple
 
 from rag_prep_tool.preprocessing.clean_text import number_to_words
 
@@ -19,6 +19,22 @@ def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
         print(f"Failed to read PDF file {pdf_file_path}: {e}")
         return {}
 
+def get_chapter_name_and_page_number(page_content:str)->Tuple[str,int]:
+    """ Get chapter name from page content"""
+    """ ' \nChapter One\nCHAPTER NAME\nPAGE CONTENT ... '"""
+    cleaned_content = re.sub(r'\s*\n\s*', '\n', page_content.strip())
+    chapter_name = cleaned_content.splitlines()[1]
+
+    """ Get page number of page number"""
+    """ Important Note: page number written on bottom of page, not the actual page number"""
+
+    try: 
+        page_no = cleaned_content.split("\n")[-1]
+        page_no = page_no.replace(" ","")
+        page_no = int(page_no)
+    except:
+        page_no = None 
+    return (chapter_name, page_no)
 
 def get_chapter_page_ranges(extracted_text:Dict[int, str]):
     chapter_page_details = []
@@ -40,20 +56,8 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     flag = True 
             
                 if flag:
-                    """ Get chapter name from page content"""
-                    """ ' \nChapter One\nCHAPTER NAME\nPAGE CONTENT ... '"""
-                    cleaned_content = re.sub(r'\s*\n\s*', '\n', content.strip())
-                    chapter_name = cleaned_content.splitlines()[1]
-
-                    """ Get page number of page number"""
-                    """ Important Note: page number written on bottom of page, not the actual page number"""
-                    
-                    try: 
-                        page_no = cleaned_content.split("\n")[-1]
-                        page_no = page_no.replace(" ","")
-                        page_no = int(page_no)
-                    except:
-                        pass 
+                    chapter_name, page_number = get_chapter_name_and_page_number(content)
+                    page_no = page_number if page_number else page_no
                     chapter_page_details.append([f"{chapter_name}", page_no])
                     break 
     
