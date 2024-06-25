@@ -2,6 +2,7 @@ import re
 import fitz  
 from pathlib import Path
 from typing import Dict , Tuple
+from fast_antx.core import transfer
 
 from rag_prep_tool.preprocessing.clean_text import number_to_words
 
@@ -18,6 +19,16 @@ def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
     except Exception as e:
         print(f"Failed to read PDF file {pdf_file_path}: {e}")
         return {}
+
+def filter_extracted_text(extracted_text:str, transcribed_text:str)->str:
+    transcribed_text = "⏎"+ transcribed_text+ "⏎"
+    annotations = [["page_breaks", "(⏎)"]]
+
+    annotated_text = transfer(transcribed_text, annotations, extracted_text, output="txt")
+    filtered_text = "".join(annotated_text.split("⏎")[1:3])
+    return filtered_text
+    
+
 
 def get_chapter_name_and_page_number(page_content:str)->Tuple[str,int]:
     """ Get chapter name from page content"""
@@ -42,8 +53,6 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
     for page_no, content in extracted_text.items():
         stripped_content = content.strip().replace("\n","").replace(" ","")
         
-        """ """
-
         """ Possible starts such as Chapter 1, Chapter One"""
         possible_starts = ["Chapter", "CHAPTER", "chapter"]
         if any(stripped_content.startswith(chapter_start) for chapter_start in possible_starts):
@@ -60,16 +69,16 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     page_no = page_number if page_number else page_no
                     chapter_page_details.append([f"{chapter_name}", page_no])
                     break 
-    
     return chapter_page_details
 
 
 
-
 if __name__ == "__main__":
-    pdf_path = Path("output/art_of_happiness_at_work.pdf")
-    extracted_text = extract_text_from_pdf_file(pdf_path)
-    chapter_details = get_chapter_page_ranges(extracted_text)
-    print(chapter_details)
+    pdf_path = Path("output/freedom_in_exile.pdf")
+    extracted_content = extract_text_from_pdf_file(pdf_path)
+    extracted_text = [content for _, content in extracted_content.items()]
+    extracted_text = ''.join(extracted_text)
 
-    
+    transcribed_text = Path("output/freedom_in_exile.txt").read_text(encoding="utf-8")
+    filter_text = filter_extracted_text(extracted_text, transcribed_text)
+    print(filter_text)
