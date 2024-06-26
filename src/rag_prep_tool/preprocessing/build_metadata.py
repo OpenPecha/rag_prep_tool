@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
-from typing import List, Dict 
+from typing import List
 
 from rag_prep_tool.preprocessing.clean_text import normalize_text, remove_chapter_name_from_text, get_chapter_from_page_number
+from rag_prep_tool.config import BOOK_SECTION_TITLES
 
 def build_metadata_for_book(page_annotated_text:str, book_name:str, chapter_page_details: List[List]):
 
@@ -14,9 +15,13 @@ def build_metadata_for_book(page_annotated_text:str, book_name:str, chapter_page
     for page_no, text in enumerate(page_annotated_text, start=first_page_no):
         text = remove_chapter_name_from_text(text, chapter_page_details)
         text = normalize_text(text)
+        chapter_name = get_chapter_from_page_number(page_no, chapter_page_details)
+        """ if the section is index, epilogue, dont need to include in metadata """
+        if chapter_name in BOOK_SECTION_TITLES:
+            break 
         meta_data.append({"book_title":book_name, 
                             "page_no":page_no, 
-                            "chapter": get_chapter_from_page_number(page_no, chapter_page_details),
+                            "chapter": chapter_name,
                             "start_char":char_count,
                             "end_char":len(text)+char_count,
                             "content":text})
