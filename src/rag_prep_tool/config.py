@@ -1,3 +1,3 @@
 EMBEDDING_MODEL = "Alibaba-NLP/gte-large-en-v1.5"
 
-BOOK_SECTION_TITLES= ['Index', 'INDEX', 'Appendix', 'APPENDIX', 'Epilogue', 'EPILOGUE', 'Glossary', 'GLOSSARY', 'Bibliography', 'BIBLIOGRAPHY', 'Endnotes', 'ENDNOTES', 'Afterword', 'AFTERWORD', 'Acknowledgments', 'ACKNOWLEDGMENTS', 'Foreword', 'FOREWORD', 'Permissions', 'PERMISSIONS', "Author's Biography", "AUTHOR'S BIOGRAPHY", 'Discussion Questions', 'DISCUSSION QUESTIONS', 'Meditation Guides', 'MEDITATION GUIDES', 'Commentaries', 'COMMENTARIES', 'Photos and Illustrations', 'PHOTOS AND ILLUSTRATIONS', 'Transcripts of Talks', 'TRANSCRIPTS OF TALKS', 'Prayers and Mantras', 'PRAYERS AND MANTRAS', 'Sermons and Teachings', 'SERMONS AND TEACHINGS', 'Historical Context', 'HISTORICAL CONTEXT', 'Study Guides', 'STUDY GUIDES', 'Lists of Centers and Resources', 'LISTS OF CENTERS AND RESOURCES', 'Explanatory Notes', 'EXPLANATORY NOTES']
+BOOK_SECTION_TITLES= ['Index', 'INDEX', 'Appendix', 'APPENDIX', 'Epilogue', 'EPILOGUE', ]
