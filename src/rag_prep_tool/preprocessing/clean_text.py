@@ -4,6 +4,9 @@ from typing import List
 from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
 from fast_antx.core import transfer
 
+def remove_space(text:str)->str:
+    text = text.strip().replace("\n","").replace(" ","")
+    return text 
 
 def normalize_text(text:str)->str:
     """ replaces double quotes with < and >"""

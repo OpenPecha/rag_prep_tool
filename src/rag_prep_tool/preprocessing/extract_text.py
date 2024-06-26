@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict , Tuple
 from fast_antx.core import transfer
 
-from rag_prep_tool.preprocessing.clean_text import number_to_words
+from rag_prep_tool.preprocessing.clean_text import number_to_words, remove_space
 from rag_prep_tool.config import BOOK_SECTION_TITLES
 
 def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
@@ -51,12 +51,34 @@ def get_page_number(page_content:str)->int:
         page_no = None 
     return page_no
 
-def get_chapter_page_ranges(extracted_text:Dict[int, str]):
+def get_chapter_page_ranges(extracted_text:Dict[int, str], book_name:str):
     chapter_page_details = []
 
     for page_no, content in extracted_text.items():
-        stripped_content = content.strip().replace("\n","").replace(" ","")
         
+        
+        """ Possible starts such as 1\n CHAPTER NAME"""
+        pattern = r"^(\d+)\n([A-Z\s]+)"
+        match = re.search(pattern, content)
+        if match:
+            chapter_number = match.group(1)
+            chapter_name = match.group(2).strip()
+            """ Able to extract 'HOLDER OF THE WHITE LOTUS' as chapter name from following text"""
+            """ 1\nHOLDER OF THE \nWHITE LOTUS\nI\n fled Tibet on 31 March 1959..."""
+            chapter_name = " ".join([word for word in chapter_name.strip().split("\n") if len(word)>1] )
+            
+            """ dont include if the chapter name already stored"""
+            """ dont include if the chapter name extracted is same as book name"""
+            if any(remove_space(chapter_name) == remove_space(included_chapter_name) for included_chapter_name,_,_ in chapter_page_details):
+                continue 
+            if remove_space(chapter_name) == remove_space(book_name): 
+                continue 
+
+            bottom_page_no = get_page_number(content)
+            chapter_page_details.append([chapter_name, bottom_page_no, page_no])
+            continue 
+
+        stripped_content = remove_space(content)
         """ Possible starts such as Chapter 1, Chapter One"""
         possible_starts = ["Chapter", "CHAPTER", "chapter"]
         if any(stripped_content.startswith(chapter_start) for chapter_start in possible_starts):
@@ -73,6 +95,7 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     bottom_page_no = get_page_number(content)
                     chapter_page_details.append([chapter_name, bottom_page_no, page_no])
                     break 
+
         """ Start of Index, Epilogue, ..."""
         for book_section_title in BOOK_SECTION_TITLES:
             if stripped_content.startswith(book_section_title):
@@ -92,6 +115,6 @@ if __name__ == "__main__":
     extracted_text = [content for _, content in extracted_content.items()]
     extracted_text = ''.join(extracted_text)
 
-    transcribed_text = Path("output/freedom_in_exile.txt").read_text(encoding="utf-8")
+    transcribed_text = Path("output/FREEDOM IN EXILE.txt").read_text(encoding="utf-8")
     filter_text = filter_extracted_text(extracted_text, transcribed_text)
     print(filter_text)

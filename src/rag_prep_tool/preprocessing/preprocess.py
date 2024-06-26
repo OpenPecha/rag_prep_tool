@@ -10,7 +10,7 @@ def preprocess(pdf_file_path:Path, transcribed_text_path:Path, book_name:str):
     """ extract text from pdf file"""
     extracted_data = extract_text_from_pdf_file(pdf_file_path)
     """ get chapter details """
-    chapter_details = get_chapter_page_ranges(extracted_data)
+    chapter_details = get_chapter_page_ranges(extracted_data, book_name)
 
 
     """ transfer page annotation from extracted text to page annotated text"""
@@ -28,6 +28,6 @@ def preprocess(pdf_file_path:Path, transcribed_text_path:Path, book_name:str):
 
 
 if __name__ == "__main__":
-    pdf_path = Path("output/art_of_happiness_at_work.pdf")
-    transcribed_path = Path("output/art_of_happiness_at_work.txt")
-    preprocess(pdf_path, transcribed_path, "freedom in exile")
+    pdf_path = Path("output/freedom_in_exile.pdf")
+    transcribed_path = Path("output/freedom_in_exile.txt")
+    preprocess(pdf_path, transcribed_path, "FREEDOM IN EXILE")
