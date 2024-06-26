@@ -5,6 +5,7 @@ from typing import Dict , Tuple
 from fast_antx.core import transfer
 
 from rag_prep_tool.preprocessing.clean_text import number_to_words
+from rag_prep_tool.config import BOOK_SECTION_TITLES
 
 def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
     """Reads the content of a PDF file using PyMuPDF."""
@@ -29,12 +30,15 @@ def filter_extracted_text(extracted_text:str, transcribed_text:str)->str:
     return filtered_text
     
 
-
-def get_chapter_name_and_page_number(page_content:str)->Tuple[str,int]:
+def get_chapter_name(page_content:str)->str:
     """ Get chapter name from page content"""
     """ ' \nChapter One\nCHAPTER NAME\nPAGE CONTENT ... '"""
     cleaned_content = re.sub(r'\s*\n\s*', '\n', page_content.strip())
     chapter_name = cleaned_content.splitlines()[1]
+    return chapter_name
+
+def get_page_number(page_content:str)->int:
+    cleaned_content = re.sub(r'\s*\n\s*', '\n', page_content.strip())
 
     """ Get page number of page number"""
     """ Important Note: page number written on bottom of page, not the actual page number"""
@@ -45,7 +49,7 @@ def get_chapter_name_and_page_number(page_content:str)->Tuple[str,int]:
         page_no = int(page_no)
     except:
         page_no = None 
-    return (chapter_name, page_no)
+    return page_no
 
 def get_chapter_page_ranges(extracted_text:Dict[int, str]):
     chapter_page_details = []
@@ -65,9 +69,19 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str]):
                     flag = True 
             
                 if flag:
-                    chapter_name, bottom_page_no = get_chapter_name_and_page_number(content)
-                    chapter_page_details.append([f"{chapter_name}", bottom_page_no, page_no])
+                    chapter_name = get_chapter_name(content)
+                    bottom_page_no = get_page_number(content)
+                    chapter_page_details.append([chapter_name, bottom_page_no, page_no])
                     break 
+        """ Start of Index, Epilogue, ..."""
+        for book_section_title in BOOK_SECTION_TITLES:
+            if stripped_content.startswith(book_section_title):
+                """ check if the book section is already covered"""
+                if book_section_title == chapter_page_details[-1][0]:
+                    break 
+                bottom_page_no = get_page_number(content)
+                chapter_page_details.append([book_section_title,bottom_page_no, page_no])
+                break 
     return chapter_page_details
 
 
