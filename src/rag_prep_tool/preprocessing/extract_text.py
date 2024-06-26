@@ -6,6 +6,7 @@ from fast_antx.core import transfer
 
 from rag_prep_tool.preprocessing.clean_text import number_to_words, remove_space
 from rag_prep_tool.config import BOOK_SECTION_TITLES
+from rag_prep_tool.utils import check_line_similarity
 
 def extract_text_from_pdf_file(pdf_file_path: Path) -> Dict[int, str]:
     """Reads the content of a PDF file using PyMuPDF."""
@@ -58,10 +59,9 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str], book_name:str):
         
         
         """ Possible starts such as 1\n CHAPTER NAME"""
-        pattern = r"^(\d+)\n([A-Z\s]+)"
+        pattern = r"^([\d\n]+)\n([A-Z\s‘’:'&]+)"
         match = re.search(pattern, content)
         if match:
-            chapter_number = match.group(1)
             chapter_name = match.group(2).strip()
             """ Able to extract 'HOLDER OF THE WHITE LOTUS' as chapter name from following text"""
             """ 1\nHOLDER OF THE \nWHITE LOTUS\nI\n fled Tibet on 31 March 1959..."""
@@ -73,6 +73,9 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str], book_name:str):
                 continue 
             if remove_space(chapter_name) == remove_space(book_name): 
                 continue 
+            
+            if check_line_similarity(remove_space(chapter_name), remove_space(book_name)) >0.8:
+                continue
 
             bottom_page_no = get_page_number(content)
             chapter_page_details.append([chapter_name, bottom_page_no, page_no])
