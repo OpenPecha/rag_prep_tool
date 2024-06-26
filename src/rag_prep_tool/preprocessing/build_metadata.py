@@ -10,7 +10,7 @@ def build_metadata_for_book(page_annotated_text:str, book_name:str, chapter_page
     
     meta_data = []
     char_count = 0
-    first_page_no = chapter_page_details[0][2]
+    first_page_no = chapter_page_details[0][1]
     for page_no, text in enumerate(page_annotated_text, start=first_page_no):
         text = remove_chapter_name_from_text(text, chapter_page_details)
         text = normalize_text(text)
