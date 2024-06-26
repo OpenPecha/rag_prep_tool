@@ -11,7 +11,11 @@ def build_metadata_for_book(page_annotated_text:str, book_name:str, chapter_page
     
     meta_data = []
     char_count = 0
-    first_page_no = chapter_page_details[0][1]
+    
+    """ if a page contains a bottom page no(normally not same as actual page no), we take that"""
+    """ else take actual page no (paper wise from first page of book)"""
+    bottom_page_no, page_no = chapter_page_details[0][1], chapter_page_details[0][2]
+    first_page_no = bottom_page_no if bottom_page_no else page_no
     for page_no, text in enumerate(page_annotated_text, start=first_page_no):
         text = remove_chapter_name_from_text(text, chapter_page_details)
         text = normalize_text(text)

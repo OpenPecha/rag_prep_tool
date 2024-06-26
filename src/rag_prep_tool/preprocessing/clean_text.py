@@ -72,9 +72,19 @@ def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->st
 
 def get_chapter_from_page_number(page_no:int, chapter_page_numbers:List[List])->str:
     prev_chapter = ""
-    for chapter, chapter_page_start,_ in chapter_page_numbers:
-        if page_no >= chapter_page_start:
-            prev_chapter = chapter
-            continue
+    
+    """ if bottom page number is not present in the book,"""
+    """ we compare it with the actual page no to get the chapter name """
+    bottom_page_no = chapter_page_numbers[0][1]
+    has_bottom_page_no = True if bottom_page_no else False 
+    for chapter, bottom_page_no, actual_page_no in chapter_page_numbers:
+        if has_bottom_page_no:
+            if page_no >= bottom_page_no:
+                prev_chapter = chapter
+                continue
+        else:
+            if page_no >= actual_page_no:
+                prev_chapter = chapter
+                continue 
         return prev_chapter
     return prev_chapter
