@@ -17,7 +17,7 @@ def preprocess(pdf_file_path:Path, transcribed_text_path:Path, book_name:str):
     transcribed_text = transcribed_text_path.read_text(encoding="utf-8")    
     first_page = chapter_details[0][2]
     last_page = chapter_details[-1][2]
-    filtered_text = "\n\n".join([content for page_no, content in extracted_data.items() if first_page <= page_no <= last_page])
+    filtered_text = "\n\n".join([content for page_no, content in extracted_data.items() if first_page <= page_no < last_page])
     page_annoted_text = transfer_page_ann(filtered_text, transcribed_text)
 
     meta_data = build_metadata_for_book(page_annoted_text, book_name,chapter_details)
@@ -26,8 +26,3 @@ def preprocess(pdf_file_path:Path, transcribed_text_path:Path, book_name:str):
     with open(f"{pdf_file_path.stem}.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(meta_data, indent=4))
 
-
-if __name__ == "__main__":
-    pdf_path = Path("output/freedom_in_exile.pdf")
-    transcribed_path = Path("output/freedom_in_exile.txt")
-    preprocess(pdf_path, transcribed_path, "FREEDOM IN EXILE")
