@@ -35,20 +35,5 @@ def build_metadata_for_book(page_annotated_text:str, book_name:str, chapter_page
     return meta_data
 
    
-if __name__ == "__main__":
-    from rag_prep_tool.vars import ETHICS_FOR_THE_MILENNIUM_PAGE_NUMBERS 
-
-
-    page_annoted_file_path = Path("output/Ethics for the New Millennium_annotated.txt")
-    book_name = "Ethics for the New Millennium"
-    pagination_details = {"start_page_number":9, "page_diff":0, "end_page_number":91}
-
-    output_file_path = Path("output/Ethics for the New Millennium_metadata.json")
-    meta_data = build_metadata_for_book(page_annoted_file_path, book_name, ETHICS_FOR_THE_MILENNIUM_PAGE_NUMBERS, pagination_details,output_file_path)
-    content = ""
-    for data in meta_data:
-        content += data["content"]
-    Path("Ethics for the New Millennium_content.txt").write_text(content, encoding="utf-8")
-        
 
 

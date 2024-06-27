@@ -112,12 +112,3 @@ def get_chapter_page_ranges(extracted_text:Dict[int, str], book_name:str):
 
 
 
-if __name__ == "__main__":
-    pdf_path = Path("output/freedom_in_exile.pdf")
-    extracted_content = extract_text_from_pdf_file(pdf_path)
-    extracted_text = [content for _, content in extracted_content.items()]
-    extracted_text = ''.join(extracted_text)
-
-    transcribed_text = Path("output/FREEDOM IN EXILE.txt").read_text(encoding="utf-8")
-    filter_text = filter_extracted_text(extracted_text, transcribed_text)
-    print(filter_text)
