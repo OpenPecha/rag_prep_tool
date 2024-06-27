@@ -1,5 +1,3 @@
-from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
-
 from rag_prep_tool.preprocessing.clean_text import ( 
     get_chapter_from_page_number,
     remove_chapter_name_from_text,
@@ -7,6 +5,7 @@ from rag_prep_tool.preprocessing.clean_text import (
     replace_double_quotes
 )
 
+from config import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
 
 def test_get_chapter_from_page_number():
     
