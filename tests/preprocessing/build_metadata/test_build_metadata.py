@@ -24,5 +24,3 @@ def test_build_metadata_for_book():
     
     """ clean up"""
     output_file_path.unlink()
-
-test_build_metadata_for_book()
