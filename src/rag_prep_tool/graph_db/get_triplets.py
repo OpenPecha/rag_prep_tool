@@ -4,17 +4,25 @@ from rag_prep_tool.graph_db.get_chatgpt_response import get_chatgpt_response
 def get_entities_terms(text:str):
     """ Get entities and terms from text"""
     prompt = f"""
+            ## Objective:
+            You are a top-tier algorithm designed for extracting all entities from the input text to build a knowledge graph.
+
+            ## Instructions:
+            -Extract key entities from the following text that are capable of having properties, and identify their types (e.g., Person, Organization, Location, Event, etc.). 
+            -Exclude non-entity elements like dates or simple attributes. 
+            -Other than the entities, don't include any other information.
+            -The text content is book by Dalai Lama.So the pronoun 'I' refers to Dalai Lama.
             
-            Extract key entities from the following text that are capable of having properties, and identify their types (e.g., Person, Organization, Location, Event, etc.). Include any relevant relationships between them. Exclude non-entity elements like dates or simple attributes. Present the information in the following output format:
+            ## Output format:
             Entity Name: Entity Type
             Entity Name: Entity Type
             .
             .
 
 
-            [TEXT START]
+            [INPUT TEXT START]
             {text}
-            [TEXT END]
+            [INPUT TEXT END]
 
     """
     response_text = ""
