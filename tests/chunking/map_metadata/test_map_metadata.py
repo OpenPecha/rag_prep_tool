@@ -1,10 +1,12 @@
+import nltk 
 from pathlib import Path 
-
 from nltk.tokenize import word_tokenize
 from llama_index.core.schema import TextNode
 
 from rag_prep_tool.chunking import chunk_files
 from rag_prep_tool.chunking.map_metadata import map_chunks_with_metadata
+
+nltk.download('punkt')
 
 def test_sentence_splitter():
     DATA_DIR = Path(__file__).parent / "data"

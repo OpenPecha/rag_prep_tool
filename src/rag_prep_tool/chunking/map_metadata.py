@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from typing import List, Dict
 from tqdm import tqdm
+
 from llama_index.core.schema import TextNode
 
 def is_overlapping(x1, x2, y1, y2):
@@ -15,7 +16,7 @@ def is_overlapping(x1, x2, y1, y2):
 
 def get_metadata_for_each_chunk(chunks: List[TextNode], metadata: List[Dict]) -> Dict:
     mapping = {}
-    for block in tqdm(metadata):
+    for block in metadata:
         for chunk in chunks:
             if is_overlapping(block["start_char"], chunk.start_char_idx, block["end_char"], chunk.end_char_idx):
                 if not chunk.id_ in mapping:
@@ -50,6 +51,7 @@ def map_chunks_with_metadata(chunks_list: List[List[TextNode]], metadata_files: 
                 chunk.metadata[key_] = metadata_str
 
         all_mapped_chunks.extend(chunks)
+
 
     return all_mapped_chunks
 

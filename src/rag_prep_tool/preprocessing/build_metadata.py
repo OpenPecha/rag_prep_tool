@@ -34,6 +34,4 @@ def build_metadata_for_book(page_annotated_text:str, book_name:str, chapter_page
 
     return meta_data
 
-   
-
-
+  
