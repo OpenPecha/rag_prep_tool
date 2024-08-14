@@ -13,7 +13,7 @@ def get_chatgpt_response(prompt:str):
          model="gpt-4-turbo",
         messages=[
             {"role": "user", "content": prompt}],
-        temperature=0.3,
+        temperature=0,
         stream=True,
         max_tokens=4096
     )
