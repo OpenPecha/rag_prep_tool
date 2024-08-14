@@ -1,11 +1,24 @@
-from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
-
 from rag_prep_tool.preprocessing.clean_text import ( 
     get_chapter_from_page_number,
     remove_chapter_name_from_text,
     normalize_text,
     replace_double_quotes
 )
+
+
+ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS = [
+    ["TRANSFORMING DISSATISFACTION AT WORK",11, 25],
+    ["THE HUMAN FACTOR",35, 49],
+    ["MAKING MONEY",49, 63],
+    ["STRIKING A BALANCE: BOREDOM AND CHALLENGE",67, 81],
+    ["JOB, CAREER, AND CALLING",97, 111],
+    ["SELF-UNDERSTANDING",117, 131],
+    ["WORK AND IDENTITY",139, 153],
+    ["RIGHT LIVELIHOOD",157, 171],
+    ["HAPPINESS AT WORK",175, 189],
+    ["EPILOGUE",205, 219],
+    ["APPENDIX",209, 223],
+]
 
 
 def test_get_chapter_from_page_number():
