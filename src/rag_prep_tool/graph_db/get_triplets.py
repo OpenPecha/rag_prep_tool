@@ -25,21 +25,53 @@ def get_entities_terms(text:str):
             [INPUT TEXT END]
 
     """
-    response_text = ""
-
-    for response in get_chatgpt_response(prompt):
-        response_text += response 
     
-    entities = response_text.split("\n")
-    entities = [entity.strip() for entity in entities if entity.strip() != ""]
-    entities = list(set(entities))
-    return entities
+    try:
+        response_text = "".join(get_chatgpt_response(prompt))
+        entities = list({entity.strip() for entity in response_text.splitlines() if entity.strip()})
+        return sorted(entities)
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return []
+
+def generate_relations(text:str):
+    """ Get relations from text"""
+    prompt = f"""
+            ## Objective:
+            You are a top-tier algorithm designed for extracting all relations that would be use to connect between entities from the input text to build a knowledge graph.
+
+            ## Instructions:
+            -relations should be verbs or verb phrases that connect entities such as 'is', 'was', 'has', 'belongs to', etc.
+            -Extract key relations from the following text that are connecting entities(e.g., Person, Organization, Location, Event, etc.) . 
+            -Other than the relations, don't include any other information.
+            
+            
+            ## Output format:
+            Each relation name should be on a new line.
 
 
+            [INPUT TEXT START]
+            {text}
+            [INPUT TEXT END]
+
+    """
+    
+    try:
+        response_text = "".join(get_chatgpt_response(prompt))
+        relations = list({relation.strip() for relation in response_text.splitlines() if relation.strip()})
+        return sorted(relations)
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return []
+    
 if __name__ == "__main__":
     from pathlib import Path 
 
     text = Path("mlmp_first_page.txt").read_text(encoding="utf-8") 
+    relations = generate_relations(text)
+    print(f"Number of relations: {len(relations)}")
+    print(relations)
+
     entities = get_entities_terms(text)
     print(f"Number of entities: {len(entities)}")
     print(entities)
