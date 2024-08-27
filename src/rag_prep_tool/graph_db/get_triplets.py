@@ -64,14 +64,35 @@ def generate_relations(text:str):
         print(f"Error occurred: {e}")
         return []
     
-if __name__ == "__main__":
-    from pathlib import Path 
 
-    text = Path("mlmp_first_page.txt").read_text(encoding="utf-8") 
-    relations = generate_relations(text)
-    print(f"Number of relations: {len(relations)}")
-    print(relations)
-
+def get_triplets(text:str):
+    """ Get entities, relations and triplets from text"""
     entities = get_entities_terms(text)
-    print(f"Number of entities: {len(entities)}")
-    print(entities)
+    relations = generate_relations(text)
+    entities_str = "\n".join(entities)
+    relations_str = "\n".join(relations)
+    prompt = f"""
+            ##  1. Overview
+                You are a top-tier algorithm designed for extracting triplets in structured formats to build a knowledge graph.
+
+            ## 2. Instructions
+               - For nodes, you have already extracted entities from the text.So you use them as nodes.
+               - For edges, you have already extracted relations from the text.So you use them as edges.
+               - Using combination of entities and relations, you have to generate triplets.
+               - Other than the triplets, don't include any other information.
+
+                [ENTITIES START]
+                {entities_str}
+                [ENTITIES END]
+
+                [RELATIONS START]
+                {relations_str}
+                [RELATIONS END]
+
+                [INPUT TEXT START]
+                {text}
+                [INPUT TEXT END]
+    """
+    response_text = get_chatgpt_response(prompt)
+    return response_text
+
