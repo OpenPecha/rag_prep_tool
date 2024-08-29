@@ -1,4 +1,4 @@
-from src.rag_prep_tool.graph_db.get_chatgpt_response import get_chatgpt_response
+from rag_prep_tool.graph_db.llm import get_chatgpt_response
 
 def coref_text(text:str):
     """ Perform coreference resolution on text"""

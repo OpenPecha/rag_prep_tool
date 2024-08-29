@@ -1,7 +1,7 @@
-from rag_prep_tool.graph_db.get_chatgpt_response import get_chatgpt_response
+from rag_prep_tool.graph_db.llm import get_chatgpt_response
 
 
-def get_entities_terms(text:str):
+def extract_entities(text:str):
     """ Get entities and terms from text"""
     prompt = f"""
             ## Objective:
@@ -34,7 +34,7 @@ def get_entities_terms(text:str):
         print(f"Error occurred: {e}")
         return []
 
-def generate_relations(text:str):
+def extract_relations(text:str):
     """ Get relations from text"""
     prompt = f"""
             ## Objective:
@@ -65,10 +65,10 @@ def generate_relations(text:str):
         return []
     
 
-def get_triplets(text:str):
+def build_triplets(text:str):
     """ Get entities, relations and triplets from text"""
-    entities = get_entities_terms(text)
-    relations = generate_relations(text)
+    entities = extract_entities(text)
+    relations = extract_relations(text)
     entities_str = "\n".join(entities)
     relations_str = "\n".join(relations)
     prompt = f"""
@@ -95,4 +95,3 @@ def get_triplets(text:str):
     """
     response_text = get_chatgpt_response(prompt)
     return response_text
-
