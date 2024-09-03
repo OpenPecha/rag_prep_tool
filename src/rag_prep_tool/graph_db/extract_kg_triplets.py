@@ -1,3 +1,4 @@
+import json 
 from rag_prep_tool.graph_db.llm import get_chatgpt_response
 
 
@@ -92,7 +93,7 @@ def build_triplets(text:str):
             - **Naming Convention**: Use camelCase for property keys, e.g., `birthDate`.
                 
             ## 5. Strict Compliance
-            Adhere to the rules strictly. Non-compliance will result in termination.
+            -Adhere to the rules strictly. Non-compliance will result in termination.
 
             [ENTITIES START]
             {entities_str}
@@ -110,11 +111,24 @@ def build_triplets(text:str):
     response_text = get_chatgpt_response(prompt)
     return response_text
 
+def parse_build_triplets_output(response):
+    cleaned_text = response.strip('```json\n')
+
+    # Step 2: Convert the cleaned JSON string to a Python dictionary
+    json_data = json.loads(cleaned_text)
+
+    return json_data
+
 
 if __name__ == "__main__":
     text = """
     The Art of Happiness is a book by the Dalai Lama and Howard Cutler, a psychiatrist who posed questions to the Dalai Lama. Cutler quotes the Dalai Lama as saying that the purpose of life is to seek happiness. He writes that the Dalai Lama suggests that the more we care for the happiness of others, the greater our own sense of well-being becomes. Cutler also reports that the Dalai Lama believes that a person can only obtain true happiness by living in harmony with others. The book explores training the human mind to seek happiness.
     """
     
-    for response in build_triplets(text):
-        print(response, end="")
+    response_text = "".join(build_triplets(text))
+    response_json = parse_build_triplets_output(response_text)
+
+    # Now `json_data` is a dictionary you can work with
+    with open("triplets.json", "w") as f:
+        json.dump(response_json, f, indent=4)
+    
