@@ -10,8 +10,10 @@ def extract_entities(text:str):
             ## Instructions:
             -Extract key entities from the following text that are capable of having properties, and identify their types (e.g., Person, Organization, Location, Event, etc.). 
             -Exclude non-entity elements like dates or simple attributes. 
-            -Other than the entities, don't include any other information.
+            -Entities should always be singular and proper nouns.
             -The text content is book by Dalai Lama.So the pronoun 'I' refers to Dalai Lama.
+            -Entities should be in CamelCase.
+            -Other than the entities, don't include any other information.
             
             ## Output format:
             Entity Name: Entity Type
@@ -43,6 +45,8 @@ def extract_relations(text:str):
             ## Instructions:
             -relations should be verbs or verb phrases that connect entities such as 'is', 'was', 'has', 'belongs to', etc.
             -Extract key relations from the following text that are connecting entities(e.g., Person, Organization, Location, Event, etc.) . 
+            -Relations should be always be verbs or verb phrases.
+            -Relations should be in CamelCase.
             -Other than the relations, don't include any other information.
             
             
@@ -93,5 +97,16 @@ def build_triplets(text:str):
                 {text}
                 [INPUT TEXT END]
     """
+    print(entities_str)
+    print(relations_str)
     response_text = get_chatgpt_response(prompt)
     return response_text
+
+
+if __name__ == "__main__":
+    text = """
+    The Art of Happiness is a book by the Dalai Lama and Howard Cutler, a psychiatrist who posed questions to the Dalai Lama. Cutler quotes the Dalai Lama as saying that the purpose of life is to seek happiness. He writes that the Dalai Lama suggests that the more we care for the happiness of others, the greater our own sense of well-being becomes. Cutler also reports that the Dalai Lama believes that a person can only obtain true happiness by living in harmony with others. The book explores training the human mind to seek happiness.
+    """
+    
+    for response in build_triplets(text):
+        print(response, end="")
