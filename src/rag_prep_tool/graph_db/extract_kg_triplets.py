@@ -1,4 +1,7 @@
 import json 
+import networkx as nx
+import matplotlib.pyplot as plt
+
 from rag_prep_tool.graph_db.llm import get_chatgpt_response
 
 
@@ -119,16 +122,33 @@ def parse_build_triplets_output(response):
 
     return json_data
 
+def visualize_knowledge_graph(data, file_name="knowledge_graph.png"):
+    # Create a directed graph
+    G = nx.DiGraph()
+
+    # Add nodes
+    for node in data['nodes']:
+        G.add_node(node['label'], label=node['type'], **node.get('properties', {}))
+
+    # Add edges
+    for rel in data['relationships']:
+        G.add_edge(rel['source'], rel['target'], label=rel['type'])
+
+    # Draw the graph
+    pos = nx.spring_layout(G)  # Layout for positioning nodes
+    plt.figure(figsize=(12, 8))
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', font_weight='bold', node_size=5000)
+    edge_labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    
+    # Save the graph as an image
+    plt.savefig(file_name, format="PNG")
+    plt.close()
 
 if __name__ == "__main__":
-    text = """
-    The Art of Happiness is a book by the Dalai Lama and Howard Cutler, a psychiatrist who posed questions to the Dalai Lama. Cutler quotes the Dalai Lama as saying that the purpose of life is to seek happiness. He writes that the Dalai Lama suggests that the more we care for the happiness of others, the greater our own sense of well-being becomes. Cutler also reports that the Dalai Lama believes that a person can only obtain true happiness by living in harmony with others. The book explores training the human mind to seek happiness.
-    """
-    
-    response_text = "".join(build_triplets(text))
-    response_json = parse_build_triplets_output(response_text)
 
-    # Now `json_data` is a dictionary you can work with
-    with open("triplets.json", "w") as f:
-        json.dump(response_json, f, indent=4)
+
+    with open("triplets.json", "r") as f:
+        data = json.load(f)
+    visualize_knowledge_graph(data)
     
