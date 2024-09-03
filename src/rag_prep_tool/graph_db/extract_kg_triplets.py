@@ -135,14 +135,14 @@ def visualize_knowledge_graph(data, file_name="knowledge_graph.png"):
         G.add_edge(rel['source'], rel['target'], label=rel['type'])
 
     # Draw the graph
-    pos = nx.spring_layout(G)  # Layout for positioning nodes
-    plt.figure(figsize=(12, 8))
-    nx.draw(G, pos, with_labels=True, node_color='lightblue', font_weight='bold', node_size=5000)
+    pos = nx.spring_layout(G, k=0.5, seed=42)  # Adjust 'k' to increase/decrease spacing
+    plt.figure(figsize=(14, 10))  # Increase figure size for better spacing
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', font_weight='bold', node_size=6000, font_size=12)
     edge_labels = nx.get_edge_attributes(G, 'label')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10)
     
     # Save the graph as an image
-    plt.savefig(file_name, format="PNG")
+    plt.savefig(file_name, format="PNG", bbox_inches='tight')
     plt.close()
 
 if __name__ == "__main__":
