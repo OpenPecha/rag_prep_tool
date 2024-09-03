@@ -76,29 +76,37 @@ def build_triplets(text:str):
     entities_str = "\n".join(entities)
     relations_str = "\n".join(relations)
     prompt = f"""
-            ##  1. Overview
-                You are a top-tier algorithm designed for extracting triplets in structured formats to build a knowledge graph.
+            ## 1. Overview
+            You are a top-tier algorithm designed for extracting information in structured formats to build a knowledge graph.
+            - **Nodes** represent entities and concepts. 
+            
+            ## 2. Labeling Nodes
+            - **Consistency**: Ensure you use only given in entities for labeling Nodes.                        
+            - **Node labels**: Never utilize integers as node labels. Node labels should be names or human-readable identifiers found in the text.
+            
+                        
+            ## 3. Handling Numerical Data and Dates
+            - Numerical data, like age or other related information, should be incorporated as attributes or properties of the respective nodes.
+            - **Property Format**: Properties must be in a key-value format.
+            - **Quotation Marks**: Never use escaped single or double quotes within property values.
+            - **Naming Convention**: Use camelCase for property keys, e.g., `birthDate`.
+                
+            ## 5. Strict Compliance
+            Adhere to the rules strictly. Non-compliance will result in termination.
 
-            ## 2. Instructions
-               - For nodes, you have already extracted entities from the text.So you use them as nodes.
-               - For edges, you have already extracted relations from the text.So you use them as edges.
-               - Using combination of entities and relations, you have to generate triplets.
-               - Other than the triplets, don't include any other information.
+            [ENTITIES START]
+            {entities_str}
+            [ENTITIES END]
 
-                [ENTITIES START]
-                {entities_str}
-                [ENTITIES END]
+            [RELATIONS START]
+            {relations_str}
+            [RELATIONS END]
 
-                [RELATIONS START]
-                {relations_str}
-                [RELATIONS END]
-
-                [INPUT TEXT START]
-                {text}
-                [INPUT TEXT END]
+            [INPUT TEXT START]
+            {text}
+            [INPUT TEXT END]
     """
-    print(entities_str)
-    print(relations_str)
+
     response_text = get_chatgpt_response(prompt)
     return response_text
 
