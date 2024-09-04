@@ -53,6 +53,7 @@ def build_triplets(text:str):
             ## 2. Labeling Nodes
             - **Consistency**: Ensure you use only given in entities for labeling Nodes.                        
             - **Node labels**: Never utilize integers as node labels. Node labels should be names or human-readable identifiers found in the text.
+            All nodes should be in in "nodes" in json format.
             
                         
             ## 3. Handling Numerical Data and Dates
@@ -66,7 +67,7 @@ def build_triplets(text:str):
             -Relations should be always be verbs or verb phrases.
             -Relations should be in CamelCase.
             - Each relation should have keys `source`, `target`, and `relation`.All
-            the relations should be in "Edges" in json format.
+            the relations should be in "edges" in json format.
 
 
             ## 5. Strict Compliance
