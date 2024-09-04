@@ -94,7 +94,14 @@ def build_triplets(text:str):
             - **Property Format**: Properties must be in a key-value format.
             - **Quotation Marks**: Never use escaped single or double quotes within property values.
             - **Naming Convention**: Use camelCase for property keys, e.g., `birthDate`.
-                
+            
+            ## 4. Relations
+            - **Consistency**: Ensure you use only given relations for connecting nodes.
+            - **Naming Convention**: Use camelCase for relation names, e.g., `hasChild`.All
+            the relations should be in "Edges" in json format.
+            - Each relation should have keys `source`, `target`, and `relation`.
+
+
             ## 5. Strict Compliance
             -Adhere to the rules strictly. Non-compliance will result in termination.
 
@@ -115,6 +122,7 @@ def build_triplets(text:str):
     return response_text
 
 def parse_build_triplets_output(response):
+    response = "".join(response)
     cleaned_text = response.strip('```json\n')
 
     # Step 2: Convert the cleaned JSON string to a Python dictionary
@@ -131,13 +139,13 @@ def visualize_knowledge_graph(data, file_name="knowledge_graph.png"):
         G.add_node(node['label'], label=node['type'], **node.get('properties', {}))
 
     # Add edges
-    for rel in data['relationships']:
-        G.add_edge(rel['source'], rel['target'], label=rel['type'])
+    for rel in data['edges']:
+        G.add_edge(rel['source'], rel['target'], label=rel['relation'])
 
     # Draw the graph
-    pos = nx.spring_layout(G, k=0.5, seed=42)  # Adjust 'k' to increase/decrease spacing
-    plt.figure(figsize=(14, 10))  # Increase figure size for better spacing
-    nx.draw(G, pos, with_labels=True, node_color='lightblue', font_weight='bold', node_size=6000, font_size=12)
+    pos = nx.spring_layout(G, k=0.75, seed=42)  # Adjust 'k' to increase/decrease spacing
+    plt.figure(figsize=(30, 20))  # Increase figure size for better spacing
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', font_weight='bold', node_size=5000, font_size=12)
     edge_labels = nx.get_edge_attributes(G, 'label')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10)
     
@@ -146,9 +154,13 @@ def visualize_knowledge_graph(data, file_name="knowledge_graph.png"):
     plt.close()
 
 if __name__ == "__main__":
+    from pathlib import Path
+    text = Path("data/mlmp_second_page.txt").read_text()
+    response = build_triplets(text)
+    data = parse_build_triplets_output(response)
 
+    with open("knowledge_graph.json", "w") as f:
+        json.dump(data, f, indent=4)
 
-    with open("triplets.json", "r") as f:
-        data = json.load(f)
     visualize_knowledge_graph(data)
     
