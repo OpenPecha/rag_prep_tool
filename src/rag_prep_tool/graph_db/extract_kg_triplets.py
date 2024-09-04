@@ -3,9 +3,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 from rag_prep_tool.graph_db.llm import get_chatgpt_response
-
+from rag_prep_tool.graph_db.text_processing import coref_text
 
 def extract_entities(text:str):
+    corefed_text = coref_text(text)
+
     """ Get entities and terms from text"""
     prompt = f"""
             ## Objective:
@@ -27,12 +29,13 @@ def extract_entities(text:str):
 
 
             [INPUT TEXT START]
-            {text}
+            {corefed_text}
             [INPUT TEXT END]
 
     """
     
     try:
+        
         response_text = "".join(get_chatgpt_response(prompt))
         entities = list({entity.strip() for entity in response_text.splitlines() if entity.strip()})
         return sorted(entities)
