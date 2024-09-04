@@ -40,45 +40,11 @@ def extract_entities(text:str):
         print(f"Error occurred: {e}")
         return []
 
-def extract_relations(text:str):
-    """ Get relations from text"""
-    prompt = f"""
-            ## Objective:
-            You are a top-tier algorithm designed for extracting all relations that would be use to connect between entities from the input text to build a knowledge graph.
-
-            ## Instructions:
-            -relations should be verbs or verb phrases that connect entities such as 'is', 'was', 'has', 'belongs to', etc.
-            -Extract key relations from the following text that are connecting entities(e.g., Person, Organization, Location, Event, etc.) . 
-            -Relations should be always be verbs or verb phrases.
-            -Relations should be in CamelCase.
-            -Other than the relations, don't include any other information.
-            
-            
-            ## Output format:
-            Each relation name should be on a new line.
-
-
-            [INPUT TEXT START]
-            {text}
-            [INPUT TEXT END]
-
-    """
-    
-    try:
-        response_text = "".join(get_chatgpt_response(prompt))
-        relations = list({relation.strip() for relation in response_text.splitlines() if relation.strip()})
-        return sorted(relations)
-    except Exception as e:
-        print(f"Error occurred: {e}")
-        return []
-    
 
 def build_triplets(text:str):
     """ Get entities, relations and triplets from text"""
     entities = extract_entities(text)
-    relations = extract_relations(text)
     entities_str = "\n".join(entities)
-    relations_str = "\n".join(relations)
     prompt = f"""
             ## 1. Overview
             You are a top-tier algorithm designed for extracting information in structured formats to build a knowledge graph.
@@ -96,10 +62,11 @@ def build_triplets(text:str):
             - **Naming Convention**: Use camelCase for property keys, e.g., `birthDate`.
             
             ## 4. Relations
-            - **Consistency**: Ensure you use only given relations for connecting nodes.
-            - **Naming Convention**: Use camelCase for relation names, e.g., `hasChild`.All
+            -**Consistency*:-relations should be verbs or verb phrases that connect entities such as 'is', 'was', 'has', 'belongs to', etc.
+            -Relations should be always be verbs or verb phrases.
+            -Relations should be in CamelCase.
+            - Each relation should have keys `source`, `target`, and `relation`.All
             the relations should be in "Edges" in json format.
-            - Each relation should have keys `source`, `target`, and `relation`.
 
 
             ## 5. Strict Compliance
@@ -108,10 +75,6 @@ def build_triplets(text:str):
             [ENTITIES START]
             {entities_str}
             [ENTITIES END]
-
-            [RELATIONS START]
-            {relations_str}
-            [RELATIONS END]
 
             [INPUT TEXT START]
             {text}
@@ -153,14 +116,3 @@ def visualize_knowledge_graph(data, file_name="knowledge_graph.png"):
     plt.savefig(file_name, format="PNG", bbox_inches='tight')
     plt.close()
 
-if __name__ == "__main__":
-    from pathlib import Path
-    text = Path("data/mlmp_second_page.txt").read_text()
-    response = build_triplets(text)
-    data = parse_build_triplets_output(response)
-
-    with open("knowledge_graph.json", "w") as f:
-        json.dump(data, f, indent=4)
-
-    visualize_knowledge_graph(data)
-    
