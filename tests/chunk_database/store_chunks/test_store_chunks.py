@@ -14,8 +14,8 @@ def test_store_chunks():
     metadata_file_path = DATA_DIR / "art_of_happiness.json"
 
     file_paths = [text_file_path]
-    chunks = chunk_files(file_paths)
-    mapped_chunks = map_chunks_with_metadata(chunks, metadata_file_path)
+    all_chunks = chunk_files(file_paths)
+    mapped_chunks = map_chunks_with_metadata(all_chunks, [metadata_file_path])
 
     database_path = DATA_DIR / "chroma_db"
     persist_path = database_path / "index"
