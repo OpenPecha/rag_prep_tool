@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import List, Dict
 from tqdm import tqdm
 
+
 from llama_index.core.schema import TextNode
 
 def is_overlapping(x1, x2, y1, y2):
@@ -43,6 +44,7 @@ def map_chunks_with_metadata(chunks_list: List[List[TextNode]], metadata_files: 
         mapping = get_metadata_for_each_chunk(chunks, metadata)
         for chunk in tqdm(chunks):
             current_metadata = mapping.get(chunk.id_, {"book_title": [], "page_no": [], "chapter": []})
+
 
             for key_ in current_metadata:
                 metadata_str = current_metadata[key_]

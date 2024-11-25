@@ -19,4 +19,3 @@ def chunk_files(file_paths: List[Path], chunk_size: int = 500, chunk_overlap: in
     
     return all_chunks
 
-
