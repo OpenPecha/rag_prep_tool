@@ -1,9 +1,10 @@
 import re 
 from typing import List 
 
-from rag_prep_tool.vars import ART_OF_HAPPINESS_CHAPTERS_PAGE_NUMBERS
-from fast_antx.core import transfer
 
+def remove_space(text:str)->str:
+    text = text.strip().replace("\n","").replace(" ","")
+    return text 
 
 def normalize_text(text:str)->str:
     """ replaces double quotes with < and >"""
@@ -60,7 +61,7 @@ def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->st
     text_stripped = text.strip().replace("\n", " ").replace(" ","")
 
     chapter_no = 1
-    for chapter, _ in chapter_page_numbers:
+    for chapter, _,_ in chapter_page_numbers:
         """ Chapter could start with 'Chapter1' or 'ChapterOne'"""
         chapter_start_variations = [f"Chapter{chapter_no}{chapter.replace(' ', '')}", f"Chapter{number_to_words(chapter_no)}{chapter.replace(' ', '')}"]
         for chapter_start in chapter_start_variations:
@@ -72,9 +73,19 @@ def remove_chapter_name_from_text(text:str, chapter_page_numbers:List[List])->st
 
 def get_chapter_from_page_number(page_no:int, chapter_page_numbers:List[List])->str:
     prev_chapter = ""
-    for chapter, chapter_page_start in chapter_page_numbers:
-        if page_no >= chapter_page_start:
-            prev_chapter = chapter
-            continue
+    
+    """ if bottom page number is not present in the book,"""
+    """ we compare it with the actual page no to get the chapter name """
+    bottom_page_no = chapter_page_numbers[0][1]
+    has_bottom_page_no = True if bottom_page_no else False 
+    for chapter, bottom_page_no, actual_page_no in chapter_page_numbers:
+        if has_bottom_page_no:
+            if page_no >= bottom_page_no:
+                prev_chapter = chapter
+                continue
+        else:
+            if page_no >= actual_page_no:
+                prev_chapter = chapter
+                continue 
         return prev_chapter
     return prev_chapter
